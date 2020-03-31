@@ -146,7 +146,7 @@ class _FirstPageState extends State<FirstPage> {
                 },
               ),
               Container(
-                height: 150,
+                height: 120,
                 child: Stack(
                   children: <Widget>[
                     Container(
@@ -181,7 +181,7 @@ class _FirstPageState extends State<FirstPage> {
                             decoration: BoxDecoration(
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.blue.withOpacity(0.8),
+                                    color: Colors.blue.withOpacity(1),
                                     blurRadius: 100.0,
                                     spreadRadius: 5.0,
                                   ),
@@ -326,7 +326,7 @@ class _FirstPageState extends State<FirstPage> {
               ),
               SizedBox(height: 20,),
               Container(
-                height: 150,
+                height: 120,
                 child: Stack(
                   children: <Widget>[
                     Container(
@@ -355,7 +355,7 @@ class _FirstPageState extends State<FirstPage> {
                             decoration: BoxDecoration(
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.blueGrey.withOpacity(0.8),
+                                    color: Colors.blueGrey.withOpacity(1),
                                     blurRadius: 100.0,
                                     spreadRadius: 5.0,
                                   ),
@@ -558,7 +558,7 @@ Future<CoronaData> fetchCoronaData() async {
   };
 
   try{
-    final response = await http.get("http://35.187.233.163:8080/currentSituation/", headers: headers);
+    final response = await http.get("http://35.247.165.9:8080/currentSituation/", headers: headers);
 
     if (response.statusCode == 200) {
       var decodedJson = json.decode(response.body);

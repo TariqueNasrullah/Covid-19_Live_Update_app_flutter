@@ -3,7 +3,6 @@ import 'dart:io';
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:http/http.dart' as http;
 import 'package:charts_flutter/flutter.dart' as charts;
 
@@ -80,8 +79,8 @@ class _SecondPageState extends State<SecondPage> {
                   if(snapshot.hasData) {
                     var pieData = [
                       new PieDataClass("Deaths", snapshot.data.death, Color(0xFF2A324E)),
-                      new PieDataClass("Recovered", snapshot.data.recovered, Color(0xFF853331)),
-                      new PieDataClass("Active Cases", snapshot.data.active, Color(0xFFDF5F4A)),
+                      new PieDataClass("Recovered", snapshot.data.recovered, Color(0xff6bb5ff)),
+                      new PieDataClass("Active Cases", snapshot.data.active, Colors.blueAccent),
                     ];
                     _seriesPiData = List<charts.Series<PieDataClass, String>>();
                     _seriesPiData.add(
@@ -113,7 +112,7 @@ class _SecondPageState extends State<SecondPage> {
                                       desiredMaxRows: 5,
                                       cellPadding: new EdgeInsets.only(right: 4.0, bottom: 4.0),
                                       entryTextStyle: charts.TextStyleSpec(
-                                        color: charts.MaterialPalette.purple.shadeDefault,
+                                        color: charts.MaterialPalette.black,
                                         fontFamily: 'Georgia',
                                         fontSize: 11,
                                       ),
@@ -271,7 +270,7 @@ class _SecondPageState extends State<SecondPage> {
                                                             textAlign: TextAlign.center,
                                                             style: TextStyle(
                                                                 fontSize: 25,
-                                                                color: Colors.blueGrey
+                                                                color: Colors.blueAccent
                                                             )
                                                         ),
                                                         Text(
@@ -540,7 +539,11 @@ class _SecondPageState extends State<SecondPage> {
                     );
                   }
                   else if(snapshot.hasError) {
-                   return Center(child: Text('${snapshot.error}'),);
+                   return Container(
+                     height: 50,
+                     color: Colors.redAccent,
+                     child: Center(child: Text('${snapshot.error}', style: TextStyle(color: Colors.white),),),
+                   );
                   }
                   else {
                     return Container(height: 600, child: Center(child: CupertinoActivityIndicator(),),);
@@ -622,7 +625,7 @@ Future<List<DateCaseData>> fetchDateCaseDate() async {
     "Authorization": "Token c5b0055ac01688ccfc0d5641b9526b88963868a0"
   };
   try {
-    final response = await http.get("http://35.187.233.163:8080/dateCaseDataList/", headers: headers);
+    final response = await http.get("http://35.247.165.9:8080/dateCaseDataList/", headers: headers);
 
     if(response.statusCode == 200) {
       var decodedJson = json.decode(response.body);
@@ -647,7 +650,7 @@ Future<List<DateDeathData>> fetchDateDeathData() async {
     "Authorization": "Token c5b0055ac01688ccfc0d5641b9526b88963868a0"
   };
   try {
-    final response = await http.get("http://35.187.233.163:8080/DateDeathDataList/", headers: headers);
+    final response = await http.get("http://35.247.165.9:8080/DateDeathDataList/", headers: headers);
 
     if(response.statusCode == 200) {
       var decodedJson = json.decode(response.body);
@@ -673,7 +676,7 @@ Future<CoronaData> fetchCoronaData() async {
   };
 
   try{
-    final response = await http.get("http://35.187.233.163:8080/currentSituation/", headers: headers);
+    final response = await http.get("http://35.247.165.9:8080/currentSituation/", headers: headers);
 
     if (response.statusCode == 200) {
       var decodedJson = json.decode(response.body);
