@@ -4,4 +4,9 @@ Covid-19 Statistics Flutter Application.
 
 ## UI
 
-![alt-page-1](git-images/page1.png)  ![alt-page-1](git-images/page2.png) ![alt-page-1](git-images/page3.png) ![alt-page-1](git-images/page4.png)
+<p float="left">
+  <img src="git-images/page1.png" width="100" />
+  <img src="git-images/page2.png" width="100" /> 
+  <img src="git-images/page3.png" width="100" />
+  <img src="git-images/page4.png" width="100" />
+</p>
