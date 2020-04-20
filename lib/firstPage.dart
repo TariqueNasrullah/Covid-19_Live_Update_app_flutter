@@ -2,9 +2,11 @@ import 'dart:io';
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:http/http.dart' as http;
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:url_launcher/url_launcher.dart';
 
 class FirstPage extends StatefulWidget{
   FirstPage({Key key}) : super(key : key);
@@ -52,6 +54,58 @@ class _FirstPageState extends State<FirstPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              child: Center(child: Text('COVID-19 Tracker', style: Theme.of(context).textTheme.title,),),
+              decoration: BoxDecoration(
+                  color: Colors.blue.shade200.withOpacity(0.9)
+              ),
+            ),
+            ListTile(
+              title: Text(
+                  'Data Source [WORLDOMETER]'
+              ),
+              trailing: Icon(Icons.multiline_chart),
+              onTap: () {
+                _launchWorldometer();
+              },
+            ),
+            ListTile(
+              title: Text(
+                'App Source Code'
+              ),
+              trailing: FaIcon(FontAwesomeIcons.github, color: Colors.blueAccent,),
+              onTap: () {
+                _launchAppGit();
+              },
+            ),
+            ListTile(
+              title: Text(
+                  'API Source Code'
+              ),
+              trailing: FaIcon(FontAwesomeIcons.github, color: Colors.blueAccent,),
+              onTap: () {
+                _launchApiGit();
+              },
+            ),
+            ListTile(
+              title: Text(
+                  'Contact Us'
+              ),
+              trailing: Icon(
+                  Icons.mail_outline,
+                color: Colors.redAccent,
+              ),
+              onTap: () {
+                _sendMail();
+              },
+            ),
+          ],
+        ),
+      ),
       body: SmartRefresher(
           enablePullDown: true,
           enablePullUp: false,
@@ -481,6 +535,44 @@ class _FirstPageState extends State<FirstPage> {
           )
       ),
     );
+  }
+
+  _launchAppGit() async {
+    const url = "https://github.com/TariqueNasrullah/Covid-19_Live_Update_app";
+    if (await canLaunch(url)){
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  _launchApiGit() async {
+    const url = "https://github.com/TariqueNasrullah/corona-realtime-data-api";
+    if (await canLaunch(url)){
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  _launchWorldometer() async {
+    const url = "https://www.worldometers.info/coronavirus/";
+    if (await canLaunch(url)){
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  _sendMail() async {
+    final _emailSubject = 'Covid-19 Tracker app';
+    final _emailLaunchString = Uri.encodeFull('mailto:nasrullahtarique@gmail.com?subject=$_emailSubject');
+
+    if(await canLaunch(_emailLaunchString)) {
+      await launch(_emailLaunchString);
+    } else {
+      throw 'Could not launch Email';
+    }
   }
 }
 

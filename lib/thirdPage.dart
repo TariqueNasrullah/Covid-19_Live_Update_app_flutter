@@ -25,7 +25,6 @@ class _ThirdPageState extends State<ThirdPage> {
       itemBuilder: (context, index){
         return Card(
           child: Container(
-              height: 120,
               child: Row(
                 children: <Widget>[
                   Expanded(
