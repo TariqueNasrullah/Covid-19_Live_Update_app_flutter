@@ -85,6 +85,7 @@ class _SecondPageState extends State<SecondPage> {
                     _seriesPiData = List<charts.Series<PieDataClass, String>>();
                     _seriesPiData.add(
                         charts.Series(
+                          id: 'pichart_1',
                           data: pieData,
                           domainFn: (PieDataClass item, _) => item.label,
                           measureFn: (PieDataClass item, _) => item.value,

@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -126,6 +125,7 @@ class _FirstPageState extends State<FirstPage> {
                     _seriesPiData = List<charts.Series<PieDataClass, String>>();
                     _seriesPiData.add(
                         charts.Series(
+                          id: 'pichart_2',
                           data: pieData,
                           domainFn: (PieDataClass item, _) => item.label,
                           measureFn: (PieDataClass item, _) => item.value,
