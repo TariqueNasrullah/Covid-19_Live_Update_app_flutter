@@ -15,4 +15,4 @@ Data Source [Worldometers](https://www.worldometers.info/coronavirus/)
 
 ## Backend
 
-Backend Written in Python3. [Backend](https://github.com/TariqueNasrullah/corona-realtime-data-api)
+Backend Written in Python3. [Covid-19_Live_Update_Api](https://github.com/TariqueNasrullah/corona-realtime-data-api)
