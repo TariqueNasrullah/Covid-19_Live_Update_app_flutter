@@ -7,45 +7,37 @@ import 'package:http/http.dart' as http;
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:url_launcher/url_launcher.dart';
 
-class FirstPage extends StatefulWidget{
-  FirstPage({Key key}) : super(key : key);
+class FirstPage extends StatefulWidget {
+  FirstPage({Key key}) : super(key: key);
 
   @override
   _FirstPageState createState() => _FirstPageState();
 }
-
 
 class _FirstPageState extends State<FirstPage> {
   Future<CoronaData> futureData;
 
   List<charts.Series<PieDataClass, String>> _seriesPiData;
 
-
   // Pull to refresh codes
   RefreshController _refreshController =
-  RefreshController(initialRefresh: false);
+      RefreshController(initialRefresh: false);
 
-  void _onRefresh() async{
+  void _onRefresh() async {
     futureData = fetchCoronaData();
-    setState(() {
-    });
+    setState(() {});
     _refreshController.refreshCompleted();
   }
 
-  void _onLoading() async{
+  void _onLoading() async {
     await Future.delayed(Duration(milliseconds: 3000));
-    if(mounted)
-      setState(() {
-
-      });
+    if (mounted) setState(() {});
     _refreshController.loadComplete();
   }
   // pull to refresh ends
 
-
-
   @override
-  void initState(){
+  void initState() {
     super.initState();
     futureData = fetchCoronaData();
   }
@@ -58,44 +50,46 @@ class _FirstPageState extends State<FirstPage> {
           padding: EdgeInsets.zero,
           children: <Widget>[
             DrawerHeader(
-              child: Center(child: Text('COVID-19 Tracker', style: Theme.of(context).textTheme.title,),),
-              decoration: BoxDecoration(
-                  color: Colors.blue.shade200.withOpacity(0.9)
+              child: Center(
+                child: Text(
+                  'COVID-19 Tracker',
+                  style: Theme.of(context).textTheme.title,
+                ),
               ),
+              decoration:
+                  BoxDecoration(color: Colors.blue.shade200.withOpacity(0.9)),
             ),
             ListTile(
-              title: Text(
-                  'Data Source [WORLDOMETER]'
-              ),
+              title: Text('Data Source [WORLDOMETER]'),
               trailing: Icon(Icons.multiline_chart),
               onTap: () {
                 _launchWorldometer();
               },
             ),
             ListTile(
-              title: Text(
-                'App Source Code'
+              title: Text('App Source Code'),
+              trailing: FaIcon(
+                FontAwesomeIcons.github,
+                color: Colors.blueAccent,
               ),
-              trailing: FaIcon(FontAwesomeIcons.github, color: Colors.blueAccent,),
               onTap: () {
                 _launchAppGit();
               },
             ),
             ListTile(
-              title: Text(
-                  'API Source Code'
+              title: Text('API Source Code'),
+              trailing: FaIcon(
+                FontAwesomeIcons.github,
+                color: Colors.blueAccent,
               ),
-              trailing: FaIcon(FontAwesomeIcons.github, color: Colors.blueAccent,),
               onTap: () {
                 _launchApiGit();
               },
             ),
             ListTile(
-              title: Text(
-                  'Contact Us'
-              ),
+              title: Text('Contact Us'),
               trailing: Icon(
-                  Icons.mail_outline,
+                Icons.mail_outline,
                 color: Colors.redAccent,
               ),
               onTap: () {
@@ -116,86 +110,88 @@ class _FirstPageState extends State<FirstPage> {
               FutureBuilder<CoronaData>(
                 future: futureData,
                 builder: (context, snapshot) {
-                  if(snapshot.hasData) {
+                  if (snapshot.hasData) {
                     var pieData = [
-                      new PieDataClass("Deaths", snapshot.data.death, Color(0xFF2A324E)),
-                      new PieDataClass("Recovered", snapshot.data.recovered, Color(0xff6bb5ff)),
-                      new PieDataClass("Active Cases", snapshot.data.active, Colors.blueAccent),
+                      new PieDataClass(
+                          "Deaths", snapshot.data.death, Color(0xFF2A324E)),
+                      new PieDataClass("Recovered", snapshot.data.recovered,
+                          Color(0xff6bb5ff)),
+                      new PieDataClass("Active Cases", snapshot.data.active,
+                          Colors.blueAccent),
                     ];
                     _seriesPiData = List<charts.Series<PieDataClass, String>>();
-                    _seriesPiData.add(
-                        charts.Series(
-                          id: 'pichart_2',
-                          data: pieData,
-                          domainFn: (PieDataClass item, _) => item.label,
-                          measureFn: (PieDataClass item, _) => item.value,
-                          colorFn: (PieDataClass item, _) =>
-                              charts.ColorUtil.fromDartColor(item.colorVal),
-                          labelAccessorFn: (PieDataClass row, _) => '${row.value}',
-                        )
-                    );
+                    _seriesPiData.add(charts.Series(
+                      id: 'pichart_2',
+                      data: pieData,
+                      domainFn: (PieDataClass item, _) => item.label,
+                      measureFn: (PieDataClass item, _) => item.value,
+                      colorFn: (PieDataClass item, _) =>
+                          charts.ColorUtil.fromDartColor(item.colorVal),
+                      labelAccessorFn: (PieDataClass row, _) => '${row.value}',
+                    ));
 
                     return Container(
                         child: Column(
-                          children: <Widget>[
-                            Container(
-                              height: 200,
-                              child: Center(
-                                child: charts.PieChart(
-                                  _seriesPiData,
-                                  animate: false,
-                                  animationDuration: Duration(seconds: 1),
-                                  behaviors: [
-                                    new charts.DatumLegend(
-                                      outsideJustification: charts.OutsideJustification.endDrawArea,
-                                      position: charts.BehaviorPosition.bottom,
-                                      horizontalFirst: true,
-                                      desiredMaxRows: 5,
-                                      cellPadding: new EdgeInsets.only(right: 4.0, bottom: 4.0),
-                                      entryTextStyle: charts.TextStyleSpec(
-                                        color: charts.MaterialPalette.black,
-                                        fontFamily: 'Georgia',
-                                        fontSize: 11,
-                                      ),
-                                    ),
-                                  ],
-                                  defaultRenderer: new charts.ArcRendererConfig(
-                                    arcWidth: 60,
-                                    arcRendererDecorators: [
-                                      new charts.ArcLabelDecorator(
-                                        labelPosition: charts.ArcLabelPosition.outside,
-                                      ),
-                                    ],
+                      children: <Widget>[
+                        Container(
+                          height: 200,
+                          child: Center(
+                            child: charts.PieChart(
+                              _seriesPiData,
+                              animate: false,
+                              animationDuration: Duration(seconds: 1),
+                              behaviors: [
+                                new charts.DatumLegend(
+                                  outsideJustification:
+                                      charts.OutsideJustification.endDrawArea,
+                                  position: charts.BehaviorPosition.bottom,
+                                  horizontalFirst: true,
+                                  desiredMaxRows: 5,
+                                  cellPadding: new EdgeInsets.only(
+                                      right: 4.0, bottom: 4.0),
+                                  entryTextStyle: charts.TextStyleSpec(
+                                    color: charts.MaterialPalette.black,
+                                    fontFamily: 'Georgia',
+                                    fontSize: 11,
                                   ),
                                 ),
+                              ],
+                              defaultRenderer: new charts.ArcRendererConfig(
+                                arcWidth: 60,
+                                arcRendererDecorators: [
+                                  new charts.ArcLabelDecorator(
+                                    labelPosition:
+                                        charts.ArcLabelPosition.outside,
+                                  ),
+                                ],
                               ),
                             ),
-                            Container(
-                                height: 160.0,
-                                child: Center(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Text(
-                                          'Corona virus cases',
-                                          style: TextStyle(
-                                            fontSize: 25.0,
-                                          )
-                                      ),
-                                      Text(
-                                          '${snapshot.data.total_case}',
-                                          style: Theme.of(context).textTheme.display1
-                                      )
-                                    ],
-                                  ),
-                                )
-                            ),
-                          ],
-                        )
-                    );
-                  }
-                  else {
-                    return Container(height: 360, child: Center(child: CupertinoActivityIndicator(),));
+                          ),
+                        ),
+                        Container(
+                            height: 160.0,
+                            child: Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Text('Corona virus cases',
+                                      style: TextStyle(
+                                        fontSize: 25.0,
+                                      )),
+                                  Text('${snapshot.data.total_case}',
+                                      style:
+                                          Theme.of(context).textTheme.display1)
+                                ],
+                              ),
+                            )),
+                      ],
+                    ));
+                  } else {
+                    return Container(
+                        height: 360,
+                        child: Center(
+                          child: CupertinoActivityIndicator(),
+                        ));
                   }
                 },
               ),
@@ -222,32 +218,30 @@ class _FirstPageState extends State<FirstPage> {
                               style: Theme.of(context).textTheme.title,
                             ),
                           ],
-                        )
-                    ),
+                        )),
                     Container(
                       child: ListView(
                         scrollDirection: Axis.horizontal,
                         children: <Widget>[
                           Container(
-                            width: MediaQuery.of(context).size.width *0.5,
+                            width: MediaQuery.of(context).size.width * 0.5,
                           ),
                           Container(
-                            decoration: BoxDecoration(
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.blue.withOpacity(1),
-                                    blurRadius: 100.0,
-                                    spreadRadius: 5.0,
-                                  ),
-                                ]
-                            ),
+                            decoration: BoxDecoration(boxShadow: [
+                              BoxShadow(
+                                color: Colors.blue.withOpacity(1),
+                                blurRadius: 100.0,
+                                spreadRadius: 5.0,
+                              ),
+                            ]),
                             child: Row(
                               children: <Widget>[
                                 Container(
                                   width: 150,
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: <Widget>[
                                       Image.asset(
                                         "images/fever.png",
@@ -268,7 +262,8 @@ class _FirstPageState extends State<FirstPage> {
                                   width: 150,
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: <Widget>[
                                       Image.asset(
                                         "images/tired.png",
@@ -289,7 +284,8 @@ class _FirstPageState extends State<FirstPage> {
                                   width: 150,
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: <Widget>[
                                       Image.asset(
                                         "images/cough.png",
@@ -310,7 +306,8 @@ class _FirstPageState extends State<FirstPage> {
                                   width: 150,
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: <Widget>[
                                       Image.asset(
                                         "images/throat.png",
@@ -331,7 +328,8 @@ class _FirstPageState extends State<FirstPage> {
                                   width: 150,
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: <Widget>[
                                       Image.asset(
                                         "images/breath.png",
@@ -352,7 +350,8 @@ class _FirstPageState extends State<FirstPage> {
                                   width: 150,
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: <Widget>[
                                       Image.asset(
                                         "images/muscle_pain.png",
@@ -378,7 +377,9 @@ class _FirstPageState extends State<FirstPage> {
                   ],
                 ),
               ),
-              SizedBox(height: 20,),
+              SizedBox(
+                height: 20,
+              ),
               Container(
                 height: 120,
                 child: Stack(
@@ -396,32 +397,30 @@ class _FirstPageState extends State<FirstPage> {
                               style: Theme.of(context).textTheme.title,
                             ),
                           ],
-                        )
-                    ),
+                        )),
                     Container(
                       child: ListView(
                         scrollDirection: Axis.horizontal,
                         children: <Widget>[
                           Container(
-                            width: MediaQuery.of(context).size.width *0.5,
+                            width: MediaQuery.of(context).size.width * 0.5,
                           ),
                           Container(
-                            decoration: BoxDecoration(
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.blueGrey.withOpacity(1),
-                                    blurRadius: 100.0,
-                                    spreadRadius: 5.0,
-                                  ),
-                                ]
-                            ),
+                            decoration: BoxDecoration(boxShadow: [
+                              BoxShadow(
+                                color: Colors.blueGrey.withOpacity(1),
+                                blurRadius: 100.0,
+                                spreadRadius: 5.0,
+                              ),
+                            ]),
                             child: Row(
                               children: <Widget>[
                                 Container(
                                   width: 150,
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: <Widget>[
                                       Image.asset(
                                         "images/wash.png",
@@ -442,7 +441,8 @@ class _FirstPageState extends State<FirstPage> {
                                   width: 150,
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: <Widget>[
                                       Image.asset(
                                         "images/face.png",
@@ -463,7 +463,8 @@ class _FirstPageState extends State<FirstPage> {
                                   width: 150,
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: <Widget>[
                                       Image.asset(
                                         "images/mask.png",
@@ -484,7 +485,8 @@ class _FirstPageState extends State<FirstPage> {
                                   width: 150,
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: <Widget>[
                                       Image.asset(
                                         "images/home.png",
@@ -505,7 +507,8 @@ class _FirstPageState extends State<FirstPage> {
                                   width: 150,
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: <Widget>[
                                       Image.asset(
                                         "images/distance.png",
@@ -532,14 +535,13 @@ class _FirstPageState extends State<FirstPage> {
                 ),
               ),
             ],
-          )
-      ),
+          )),
     );
   }
 
   _launchAppGit() async {
     const url = "https://github.com/TariqueNasrullah/Covid-19_Live_Update_app";
-    if (await canLaunch(url)){
+    if (await canLaunch(url)) {
       await launch(url);
     } else {
       throw 'Could not launch $url';
@@ -548,7 +550,7 @@ class _FirstPageState extends State<FirstPage> {
 
   _launchApiGit() async {
     const url = "https://github.com/TariqueNasrullah/corona-realtime-data-api";
-    if (await canLaunch(url)){
+    if (await canLaunch(url)) {
       await launch(url);
     } else {
       throw 'Could not launch $url';
@@ -557,7 +559,7 @@ class _FirstPageState extends State<FirstPage> {
 
   _launchWorldometer() async {
     const url = "https://www.worldometers.info/coronavirus/";
-    if (await canLaunch(url)){
+    if (await canLaunch(url)) {
       await launch(url);
     } else {
       throw 'Could not launch $url';
@@ -566,9 +568,10 @@ class _FirstPageState extends State<FirstPage> {
 
   _sendMail() async {
     final _emailSubject = 'Covid-19 Tracker app';
-    final _emailLaunchString = Uri.encodeFull('mailto:nasrullahtarique@gmail.com?subject=$_emailSubject');
+    final _emailLaunchString = Uri.encodeFull(
+        'mailto:nasrullahtarique@gmail.com?subject=$_emailSubject');
 
-    if(await canLaunch(_emailLaunchString)) {
+    if (await canLaunch(_emailLaunchString)) {
       await launch(_emailLaunchString);
     } else {
       throw 'Could not launch Email';
@@ -576,21 +579,19 @@ class _FirstPageState extends State<FirstPage> {
   }
 }
 
-
 class CountryData {
   final String name;
   final int total_case, new_case, death, new_death, recovered, active, serious;
 
-  CountryData({
-    this.name,
-    this.total_case,
-    this.new_case,
-    this.death,
-    this.new_death,
-    this.recovered,
-    this.active,
-    this.serious
-  });
+  CountryData(
+      {this.name,
+      this.total_case,
+      this.new_case,
+      this.death,
+      this.new_death,
+      this.recovered,
+      this.active,
+      this.serious});
 
   factory CountryData.fromJson(Map<String, dynamic> json) {
     return CountryData(
@@ -606,10 +607,19 @@ class CountryData {
   }
 }
 
-
 class CoronaData {
-  final int total_case ,death, recovered, active, closed, mild, serious, recovered_or_discharged;
-  final double mild_percentage, serious_percentage, recovered_or_discharged_percentage, death_percentage;
+  final int total_case,
+      death,
+      recovered,
+      active,
+      closed,
+      mild,
+      serious,
+      recovered_or_discharged;
+  final double mild_percentage,
+      serious_percentage,
+      recovered_or_discharged_percentage,
+      death_percentage;
 
   CoronaData({
     this.total_case,
@@ -628,40 +638,42 @@ class CoronaData {
 
   factory CoronaData.fromJson(Map<String, dynamic> json) {
     return CoronaData(
-        total_case: json['total_case'],
-        death: json['death'],
-        recovered: json['recovered'],
-        active: json['active'],
-        closed: json['closed'],
-        mild: json['mild'],
-        mild_percentage: json['mild_percentage'],
-        serious: json['serious'],
-        serious_percentage: json['serious_percentage'],
-        recovered_or_discharged: json['recovered_or_discharged'],
-        recovered_or_discharged_percentage: json['recovered_or_discharged_percentage'],
-        death_percentage: json['death_percentage'],
+      total_case: json['total_case'],
+      death: json['death'],
+      recovered: json['recovered'],
+      active: json['active'],
+      closed: json['closed'],
+      mild: json['mild'],
+      mild_percentage: json['mild_percentage'],
+      serious: json['serious'],
+      serious_percentage: json['serious_percentage'],
+      recovered_or_discharged: json['recovered_or_discharged'],
+      recovered_or_discharged_percentage:
+          json['recovered_or_discharged_percentage'],
+      death_percentage: json['death_percentage'],
     );
   }
 }
 
 Future<CoronaData> fetchCoronaData() async {
   Map<String, String> headers = {
-    "Authorization": "Token c5b0055ac01688ccfc0d5641b9526b88963868a0"
+    "Authorization": "Token ae476a6a5dad2714695c3cbed577b48e77835ce1"
   };
 
-  try{
-    final response = await http.get("http://35.247.165.9:8080/currentSituation/", headers: headers);
+  try {
+    final response = await http
+        .get("http://34.87.85.112:8080/currentSituation/", headers: headers);
 
     if (response.statusCode == 200) {
       var decodedJson = json.decode(response.body);
-      if(decodedJson.length < 1) {
+      if (decodedJson.length < 1) {
         throw Exception('Failed to fetch data from server.');
       }
       return CoronaData.fromJson(decodedJson[0]);
     } else {
       throw Exception('Failed to load Data');
     }
-  } catch(e) {
+  } catch (e) {
 //    print(e);
     throw Exception("Can't Connect to API");
   }
